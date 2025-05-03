@@ -6,6 +6,13 @@ pointing to one on disk.
 
 *Now supports webroot configuration and basic auth!*
 
+# Quick Install
+
+```
+$ pipx install git+https://github.com/manesec/simple-https-server
+$ simple-https-server -i 0.0.0.0 -p 8443 --generate
+```
+
 # Thanks
 
 Special thanks to @touilleMan and @UniIsland for providing code to support
@@ -36,7 +43,7 @@ Finally, install all the junk: `install.sh`
 ## Getting Help
 
 ```
-user@computer:simple_https_server~> python3 server.py -h
+user@computer:simple-https-server~> python3 server.py -h
 usage: SimpleHTTPSServer [-h] --interface INTERFACE [--port PORT]
                          [--webroot WEBROOT] [--enable-uploads]
                          [--disable-caching] [--certfile CERTFILE]
@@ -101,7 +108,7 @@ Obfuscation:
 ## Start the Server on localhost using a self-signed certificate
 
 ```
-user@computer:simple_https_server~> python3 server.py -i 127.0.0.1 -p 8080 --generate
+user@computer:simple-https-server~> python3 server.py -i 127.0.0.1 -p 8080 --generate
 
 SimpleHTTPSServer
 

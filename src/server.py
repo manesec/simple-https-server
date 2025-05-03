@@ -20,6 +20,8 @@ from io import BytesIO, StringIO
 import email
 from hashlib import md5
 from OpenSSL import crypto
+import random
+import string
 
 '''
 Credit to the following people for providing file upload capabilities:
@@ -28,6 +30,9 @@ Credit to the following people for providing file upload capabilities:
     - https://gist.github.com/UniIsland
         - https://gist.github.com/UniIsland/3346170
 '''
+
+# random string name
+random_string = ''.join(random.choices(string.ascii_letters, k=16))
 
 def md5sum(data):
     m = md5()
@@ -660,15 +665,17 @@ def run_server(interface, port, keyfile, certfile,
         print()
     finally:
         if kwargs['generate']:
+            print("[*] Cleaning up ...")
             # only remove files if they weren't manually specified
-            if certfile == "/tmp/self_signed.crt":
-                remove('/tmp/self_signed.crt')
-            if keyfile == "/tmp/self_signed.key":
-                remove('/tmp/self_signed.key')
+            if certfile == "/tmp/self_signed_"+random_string+".crt":
+                remove('/tmp/self_signed_'+random_string+'.crt')
+            if keyfile == "/tmp/self_signed_"+random_string+".key":
+                remove('/tmp/self_signed_'+random_string+'.key')
 
 def generate_certificate(certfile, keyfile):
 
-    sprint("Generating self signed certificate")
+    sprint("Generating self signed certificate: /tmp/self_signed_"+random_string+".crt")
+    sprint("Generating self signed certificate: /tmp/self_signed_"+random_string+".key")
 
     # create a key pair
     k = crypto.PKey()
@@ -699,8 +706,8 @@ def generate_certificate(certfile, keyfile):
 if __name__ == '__main__':
 
 
-    parser = argparse.ArgumentParser(prog="SimpleHTTPSServer",
-        description="Start a listening HTTPS server.")
+    parser = argparse.ArgumentParser(prog="simple-https-server",
+                                     description="Start a listening HTTPS server. Example: $ simple-https-server -i 0.0.0.0 -p 8443 --generate")
 
     server_group = parser.add_argument_group('Basic Server Configuration',
         '''Use the following parameters to apply basic server
@@ -735,8 +742,8 @@ if __name__ == '__main__':
             path and name
             ''')
 
-    certfile = '/tmp/self_signed.crt'
-    keyfile = '/tmp/self_signed.key'
+    certfile = '/tmp/self_signed_'+random_string+'.crt'
+    keyfile = '/tmp/self_signed_'+random_string+'.key'
 
     cert_gen_group.add_argument('--generate', '-g', default=None, action='store_true',
         help="Generate and use a self-signed certificate in /tmp.")
